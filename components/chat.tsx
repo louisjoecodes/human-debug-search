@@ -37,9 +37,8 @@ export function Chat({ id, query }: ChatProps) {
           userMessage,
           responseMessage
         ])
-
-        // Update the URL to remove the text parameter
-        router.replace('/', undefined, { shallow: true })
+        // Update the URL to remove the query parameter
+        router.push('/', { scroll: false })
       }
 
       submitQuery()
