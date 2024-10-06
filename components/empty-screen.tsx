@@ -3,22 +3,23 @@ import { ArrowRight } from 'lucide-react'
 
 const exampleMessages = [
   {
-    heading: 'What is OpenAI o1?',
-    message: 'What is OpenAI o1?'
+    heading: 'What are the latest statistics on breast cancer survival rates?',
+    message: 'What is the most recent data on breast cancer survival rates across different stages?'
   },
   {
-    heading: 'Why is Nvidia growing rapidly?',
-    message: 'Why is Nvidia growing rapidly?'
+    heading: 'How effective is immunotherapy?',
+    message: 'What does the latest research say about the effectiveness of immunotherapy in treating breast cancer?'
   },
   {
-    heading: 'How does the Vercel AI SDK work?',
-    message: 'How does the Vercel AI SDK work?'
+    heading: 'What are the trends in breast cancer diagnosis?',
+    message: 'What are the most recent trends in breast cancer diagnosis and early detection rates?'
   },
   {
-    heading: 'Tesla vs Rivian',
-    message: 'Tesla vs Rivian'
+    heading: 'Breast cancer in younger women',
+    message: 'What is the latest data on breast cancer incidence in women under 40?'
   }
-]
+];
+
 export function EmptyScreen({
   submitMessage,
   className

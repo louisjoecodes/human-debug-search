@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import type { AI, UIState } from '@/app/actions'
+import type { AI } from '@/app/actions'
 import { useUIState, useActions, useAIState } from 'ai/rsc'
 import { cn } from '@/lib/utils'
 import { UserMessage } from './user-message'
@@ -14,11 +14,10 @@ import { generateId } from 'ai'
 import { useAppState } from '@/lib/utils/app-state'
 
 interface ChatPanelProps {
-  messages: UIState
-  query?: string
+  messages: any[] // Replace 'any[]' with the correct type from your AI setup
 }
 
-export function ChatPanel({ messages, query }: ChatPanelProps) {
+export function ChatPanel({ messages }: ChatPanelProps) {
   const [input, setInput] = useState('')
   const [showEmptyScreen, setShowEmptyScreen] = useState(false)
   const [, setMessages] = useUIState<typeof AI>()
@@ -27,10 +26,9 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
   const { submit } = useActions()
   const router = useRouter()
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const isFirstRender = useRef(true) // For development environment
 
   async function handleQuerySubmit(query: string, formData?: FormData) {
-    setInput(query)
+    setInput('')
     setIsGenerating(true)
 
     // Add user message to UI state
@@ -53,18 +51,10 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    await handleQuerySubmit(input, formData)
-  }
-
-  // if query is not empty, submit the query
-  useEffect(() => {
-    if (isFirstRender.current && query && query.trim().length > 0) {
-      handleQuerySubmit(query)
-      isFirstRender.current = false
+    if (input.trim()) {
+      await handleQuerySubmit(input)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query])
+  }
 
   useEffect(() => {
     const lastMessage = aiMessage.messages.slice(-1)[0]
@@ -107,10 +97,6 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
     )
   }
 
-  if (query && query.trim().length > 0) {
-    return null
-  }
-
   return (
     <div
       className={
@@ -128,7 +114,7 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
             placeholder="Ask a question..."
             spellCheck={false}
             value={input}
-            className="resize-none w-full min-h-12 rounded-fill bg-muted border border-input pl-4 pr-10 pt-3 pb-1 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'"
+            className="resize-none w-full min-h-12 rounded-sm bg-muted border border-input pl-4 pr-10 pt-3 pb-1 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             onChange={e => {
               setInput(e.target.value)
               setShowEmptyScreen(e.target.value.length === 0)
